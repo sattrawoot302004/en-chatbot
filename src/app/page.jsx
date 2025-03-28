@@ -42,7 +42,7 @@ export default function Home() {
 
     try {
       // IMPORTANT: Ensure this matches your API route path
-      const res = await fetch('/api/chat', { // Changed from /api/chat
+      const res = await fetch('/api/chat', { // Changed from /api/chat 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: currentInput }),
@@ -153,7 +153,7 @@ export default function Home() {
 
                                     {/* Message Bubble */}
                                     <div
-                    className={`max-w-[70%] p-3 rounded-lg text-base sm:text-lg break-words ${
+                    className={`max-w-[70%] p-3 rounded-lg text-base sm:text-lg break-words break-all ${
                       msg.role === 'user'
                         ? 'bg-blue-500 text-white'
                         : 'bg-gray-200 text-black'
