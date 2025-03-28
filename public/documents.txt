@@ -255,3 +255,8 @@ These are website links
 ]
 ```
 </documents>
+
+<all_images>
+ช่องทางติดต่อ.jpg
+ค่าธรรมเนียมการศึกษา.png
+</all_images>
