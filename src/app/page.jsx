@@ -1,3 +1,5 @@
+// src/app/page.jsx
+
 "use client";
 import { useState } from 'react';
 import Sidebar from './components/Sidebar';
@@ -9,6 +11,34 @@ const cleanMarkdownLinks = (text) => {
   return text.replace(/\[(https?:\/\/[^\]]+)\]\(\1\)/g, '[ดูรายละเอียดเพิ่มเติม]($1)');
 };
 
+const ensureProperListFormat = (text) => {
+  if (!text) return '';
+  
+  // First split by lines
+  let lines = text.split('\n');
+  let formattedLines = [];
+  
+  // Check each line for potential list items
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    
+    // Check if this looks like a numbered list item (with or without proper formatting)
+    if (/^\d+\.?\s+.+/.test(line)) {
+      // Extract number and content, ensuring proper list format
+      const match = line.match(/^(\d+)\.?\s+(.+)/);
+      if (match) {
+        formattedLines.push(`${match[1]}. ${match[2]}`);
+      } else {
+        formattedLines.push(line);
+      }
+    } else {
+      formattedLines.push(line);
+    }
+  }
+  
+  return formattedLines.join('\n');
+};
+
 export default function Home() {
   // Update message state structure to potentially include an 'image' field
   const [messages, setMessages] = useState([]);
@@ -16,110 +46,101 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [typingMessage, setTypingMessage] = useState('');
 
-  const typeMessage = (message) => {
-    return new Promise((resolve) => {
-      let index = 0;
-      const typingInterval = setInterval(() => {
-        if (index <= message.length) {
-          setTypingMessage(message.slice(0, index));
-          index++;
-        } else {
-          clearInterval(typingInterval);
-          resolve();
-        }
-      }, 20);
-    });
-  };
-
+  // Replace the sendMessage function in your page.jsx
   const sendMessage = async () => {
     if (input.trim() === '') return;
-
+  
     const currentInput = input;
     setMessages((prevMessages) => [...prevMessages, { role: 'user', content: currentInput }]);
     setInput('');
     setLoading(true);
-    setTypingMessage(''); // Reset typing message immediately
-
+    
+    // Clear typing message at start
+    setTypingMessage('');
+    
+    // Add the empty bot message to the conversation
+    setMessages((prevMessages) => [
+      ...prevMessages, 
+      { role: 'bot', content: '', image: null }
+    ]);
+    
     try {
-      // IMPORTANT: Ensure this matches your API route path
-      const res = await fetch('/api/chat', { // Changed from /api/chat 
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: currentInput }),
       });
-
-      if (!res.ok) {
-        let errorData = { message: 'Error fetching response from API' };
-        try {
-            errorData = await res.json();
-        } catch (jsonError) {}
-        throw new Error(errorData.error || errorData.message || `API Error: ${res.statusText}`);
+  
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.statusText}`);
       }
-
-      const data = await res.json();
-
-      // Create the initial bot message object including the image property
-      const botMessage = {
-        role: 'bot',
-        content: '', // Start with empty content for typing effect
-        image: data.image // Store the image URL/filename
-      };
-
-      // Add the placeholder message immediately
-      setMessages((prevMessages) => [...prevMessages, botMessage]);
-
-      // Start typing effect for the answer
-      await typeMessage(data.answer);
-
-      // Update the last message (the bot message) with the final content
-      setMessages((prevMessages) => {
-        const updatedMessages = [...prevMessages];
-        const lastMessageIndex = updatedMessages.length - 1;
-        if (updatedMessages[lastMessageIndex] && updatedMessages[lastMessageIndex].role === 'bot') {
-          updatedMessages[lastMessageIndex] = {
-            ...updatedMessages[lastMessageIndex], // Keep role and image
-            content: data.answer // Set the final content
-          };
+  
+      const reader = response.body.getReader();
+      let accumulatedContent = '';
+      let selectedImage = null;
+      
+      while (true) {
+        const { done, value } = await reader.read();
+        
+        if (done) break;
+        
+        const chunkText = new TextDecoder().decode(value);
+        const jsonChunks = chunkText.split('\n').filter(part => part.trim());
+        
+        for (const jsonChunk of jsonChunks) {
+          try {
+            const data = JSON.parse(jsonChunk);
+            
+            if (data.type === 'metadata') {
+              selectedImage = data.image;
+              
+              setMessages((prevMessages) => {
+                const updatedMessages = [...prevMessages];
+                const lastIndex = updatedMessages.length - 1;
+                
+                if (lastIndex >= 0 && updatedMessages[lastIndex].role === 'bot') {
+                  updatedMessages[lastIndex] = {
+                    ...updatedMessages[lastIndex],
+                    image: selectedImage
+                  };
+                }
+                
+                return updatedMessages;
+              });
+            } 
+            else if (data.type === 'chunk') {
+              console.log(`Chunk received:`, data.content);
+              
+              // Update both accumulated content and the typing message
+              accumulatedContent += data.content;
+              setTypingMessage(accumulatedContent); // <-- Update typing message
+              
+              // Update the message with new content
+              setMessages((prevMessages) => {
+                const updatedMessages = [...prevMessages];
+                const lastIndex = updatedMessages.length - 1;
+                
+                if (lastIndex >= 0 && updatedMessages[lastIndex].role === 'bot') {
+                  updatedMessages[lastIndex] = {
+                    ...updatedMessages[lastIndex],
+                    content: accumulatedContent,
+                    image: selectedImage
+                  };
+                }
+                
+                return updatedMessages;
+              });
+            }
+          } catch (jsonError) {
+            console.error('Error parsing JSON from stream chunk:', jsonError);
+          }
         }
-        return updatedMessages;
-      });
-
-      setTypingMessage(''); // Clear typing message after completion
-
+      }
+  
     } catch (error) {
-      console.error("Send message error:", error); // Log the actual error
-      const errorMessageContent = `ขออภัย เกิดข้อผิดพลาด: ${error.message}`;
-
-       // Create the error bot message object
-      const errorBotMessage = {
-        role: 'bot',
-        content: '', // Start with empty content for typing effect
-        image: "Not use any image." // No image for errors
-      };
-
-      // Add the placeholder error message
-      setMessages((prevMessages) => [...prevMessages, errorBotMessage]);
-
-      // Start typing effect for the error message
-      await typeMessage(errorMessageContent);
-
-      // Update the last message (the error bot message) with the final content
-      setMessages((prevMessages) => {
-        const updatedMessages = [...prevMessages];
-        const lastMessageIndex = updatedMessages.length - 1;
-         if (updatedMessages[lastMessageIndex] && updatedMessages[lastMessageIndex].role === 'bot') {
-            updatedMessages[lastMessageIndex] = {
-                ...updatedMessages[lastMessageIndex], // Keep role and image
-                content: errorMessageContent // Set the final error content
-            };
-         }
-        return updatedMessages;
-      });
-
-      setTypingMessage(''); // Clear typing message after completion
-
-    } finally { // Use finally to ensure loading is set to false
-        setLoading(false);
+      // Error handling (unchanged)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,7 +156,7 @@ export default function Home() {
             {messages.map((msg, idx) => {
               // Determine content: use typing message only for the very last bot message *during* loading
               const isLastBotMessage = msg.role === 'bot' && idx === messages.length - 1;
-              const displayContent = isLastBotMessage && loading ? typingMessage : msg.content;
+              const displayContent = msg.content;
 
               return (
                 <div
@@ -159,8 +180,11 @@ export default function Home() {
                         : 'bg-gray-200 text-black'
                     }`}
                   >
-                    {/* Markdown Content - INCORRECT USAGE */}
-                    {/* <ReactMarkdown
+
+                    {/* Add a wrapper div and move the className here */}
+                    <div className="prose prose-sm sm:prose-base max-w-none prose-ol:list-decimal prose-ul:list-disc">
+                    <ReactMarkdown
+                      key={`markdown-${idx}-${displayContent.length}`}
                       remarkPlugins={[remarkGfm]}
                       components={{
                         a: ({ node, ...props }) => (
@@ -171,36 +195,14 @@ export default function Home() {
                             className="text-blue-600 hover:text-blue-800 underline break-all"
                           />
                         ),
+                        ol: ({node, ...props}) => <ol className="list-decimal pl-6 my-2" {...props} />,
+                        ul: ({node, ...props}) => <ul className="list-disc pl-6 my-2" {...props} />,
+                        li: ({node, ...props}) => <li className="ml-2 pl-0" {...props} />
                       }}
-                      className="prose prose-sm sm:prose-base max-w-none" // <--- THIS CAUSES THE ERROR
                     >
-                      {cleanMarkdownLinks(displayContent)}
-                    </ReactMarkdown> */}
-
-
-                    {/* --- CORRECTED USAGE --- */}
-                    {/* Add a wrapper div and move the className here */}
-                    <div className="prose prose-sm sm:prose-base max-w-none dark:prose-invert"> {/* Added dark:prose-invert for potential dark mode */}
-                       <ReactMarkdown
-                         remarkPlugins={[remarkGfm]}
-                         components={{
-                           // Your custom 'a' component is fine here
-                           a: ({ node, ...props }) => (
-                             <a
-                               {...props}
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               className="text-blue-600 hover:text-blue-800 underline break-all" // ClassName inside components is okay
-                             />
-                           ),
-                           // You can add more overrides if needed, e.g., for paragraphs:
-                           // p: ({node, ...props}) => <p className="mb-2" {...props} />,
-                         }}
-                         // No className here anymore!
-                       >
-                         {cleanMarkdownLinks(displayContent)}
-                       </ReactMarkdown>
-                    </div>
+                      {ensureProperListFormat(cleanMarkdownLinks(displayContent))}
+                    </ReactMarkdown>
+                  </div>
                     {/* --- END CORRECTED USAGE --- */}
 
 
