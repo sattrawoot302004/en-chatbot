@@ -153,7 +153,7 @@ export default function Home() {
                   )}
 
                   <div
-                    className={`max-w-[90%] md:max-w-[80%] lg:max-w-[70%] p-3 rounded-lg text-sm sm:text-base md:text-lg break-words ${msg.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
+                    className={`max-w-[90%] md:max-w-[80%] lg:max-w-[70%] p-3 rounded-lg text-sm sm:text-base md:text-lg break-words ${msg.role === 'user' ? 'bg-gray-200 text-black' : 'bg-gray-200 text-black'
                       }`}
                   >
                     <div className="prose prose-sm sm:prose-base max-w-none prose-ol:list-decimal prose-ul:list-disc">
@@ -191,7 +191,7 @@ export default function Home() {
 
                   {msg.role === 'user' && (
                     <img
-                      src="/chat-centered-text-thin-svgrepo-com.svg"
+                      src="/Profile.png"
                       alt="User Avatar"
                       className="w-8 h-8 md:w-10 md:h-10 ml-2 md:ml-3 rounded-full flex-shrink-0"
                     />
