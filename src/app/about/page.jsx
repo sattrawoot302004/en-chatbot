@@ -53,6 +53,8 @@ function Page() {
               ))}
             </div>
 
+            <div className='text-right mt-1 text-gray-600'><a href="http://www.freepik.com">Designed by Freepik</a></div>
+
             {/* ข้อมูลมหาวิทยาลัย */}
             <div className="mt-12 text-center">
               <div className="border-t border-gray-300 pt-6">
