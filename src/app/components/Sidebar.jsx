@@ -56,11 +56,11 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
           </nav>
         </div>
 
-        <div className="flex-grow flex justify-center items-center mt-40">
+        <div className="flex-grow flex justify-center items-center mt-90">
           <img
-            src="KKUimage.svg"
+            src="ENkku.png"
             alt="KKU Logo"
-            className="w-32 md:w-40 transition-transform duration-300 transform"
+            className="w-55 md:w-55 lg:w-55 transition-transform duration-300 transform"
           />
         </div>
       </aside>
