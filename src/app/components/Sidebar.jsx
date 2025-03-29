@@ -41,7 +41,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
                   ${pathname === '/' ? 'bg-[#33333D]' : 'hover:bg-[#33333D]'
                   }`}
               >
-                <span className="mr-2">💬</span> Chat
+                <span className="mr-2"><img src="Chat.svg" alt="chat bot" /></span> Chat
               </button>
             </Link>
             <Link href="/about">
@@ -50,7 +50,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
                   ${pathname === '/about' ? 'bg-[#33333D]' : 'hover:bg-[#33333D]'
                   }`}
               >
-                <span className="mr-2">❔</span> About us
+                <span className="mr-2"><img src="About.svg" alt="about us" /></span> About us
               </button>
             </Link>
           </nav>
