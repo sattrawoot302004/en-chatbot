@@ -35,7 +35,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
           </div>
 
           <nav className="space-y-4 mt-6">
-            <Link href="/" onClick={() => setIsSidebarOpen(false)}>
+            <Link href="/">
               <button
                 className={`w-full flex items-center px-4 py-2 m-1 rounded-md text-white transition-all duration-300 ease-in-out transform hover:scale-105 
                   ${pathname === '/' ? 'bg-[#33333D]' : 'hover:bg-[#33333D]'
@@ -44,7 +44,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
                 <span className="mr-2">💬</span> Chat
               </button>
             </Link>
-            <Link href="/about" onClick={() => setIsSidebarOpen(false)}>
+            <Link href="/about">
               <button
                 className={`w-full flex items-center px-4 py-2 m-1 rounded-md text-white transition-all duration-300 ease-in-out transform hover:scale-105 
                   ${pathname === '/about' ? 'bg-[#33333D]' : 'hover:bg-[#33333D]'
