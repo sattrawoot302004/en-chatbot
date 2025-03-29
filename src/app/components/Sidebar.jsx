@@ -27,7 +27,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
             </div>
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className="text-white text-2xl"
+              className="text-white text-3xl mb-8"
               aria-label="Close sidebar"
             >
               &times;
@@ -37,7 +37,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
           <nav className="space-y-4 mt-6">
             <Link href="/" onClick={() => setIsSidebarOpen(false)}>
               <button
-                className={`w-full flex items-center px-4 py-2 rounded text-white transition-all duration-300 ease-in-out transform hover:scale-105 
+                className={`w-full flex items-center px-4 py-2 m-1 rounded-md text-white transition-all duration-300 ease-in-out transform hover:scale-105 
                   ${pathname === '/' ? 'bg-[#33333D]' : 'hover:bg-[#33333D]'
                   }`}
               >
@@ -46,7 +46,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
             </Link>
             <Link href="/about" onClick={() => setIsSidebarOpen(false)}>
               <button
-                className={`w-full flex items-center px-4 py-2 rounded text-white transition-all duration-300 ease-in-out transform hover:scale-105 
+                className={`w-full flex items-center px-4 py-2 m-1 rounded-md text-white transition-all duration-300 ease-in-out transform hover:scale-105 
                   ${pathname === '/about' ? 'bg-[#33333D]' : 'hover:bg-[#33333D]'
                   }`}
               >
@@ -60,7 +60,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
           <img
             src="KKUimage.svg"
             alt="KKU Logo"
-            className="w-32 md:w-40 transition-transform duration-300 transform hover:scale-105"
+            className="w-32 md:w-40 transition-transform duration-300 transform"
           />
         </div>
       </aside>

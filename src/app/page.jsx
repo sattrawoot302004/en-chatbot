@@ -120,7 +120,7 @@ export default function Home() {
       )}
 
       <div className="bg-[#1E1E1E] p-3 flex-1 text-black flex flex-col h-screen">
-        <div className="bg-[#A73B24] text-white px-8 py-5 text-lg font-semibold flex items-center justify-between rounded-t-2xl">
+        <div className="bg-[#A73B24] text-white px-8 py-4 text-xl font-semibold flex items-center justify-between rounded-t-2xl">
           <div className="flex items-center">
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -202,7 +202,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="bg-white p-5 md:p-4">
+        <div className="bg-white p-5 md:p-4 rounded-b-2xl">
           <div className="flex items-center space-x-2">
             <textarea
               value={input}
