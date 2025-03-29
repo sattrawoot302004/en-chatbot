@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-
+import Image from 'next/image';
 const cleanMarkdownLinks = (text) => {
   if (!text) return '';
   return text.replace(/\[(https?:\/\/[^\]]+)\]\(\1\)/g, '[ดูรายละเอียดเพิ่มเติม]($1)');
@@ -145,9 +145,10 @@ export default function Home() {
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'items-start justify-start'}`}
                 >
                   {msg.role === 'bot' && (
-                    <img
+                    <Image
                       src="/ENG_KKU_Symbol.svg"
                       alt="Bot Avatar"
+                      width={24} height={24} 
                       className="w-8 h-8 md:w-10 md:h-10 mr-2 md:mr-3 rounded-full flex-shrink-0"
                     />
                   )}
@@ -175,9 +176,10 @@ export default function Home() {
 
                     {msg.role === 'bot' && msg.image && msg.image !== "Not use any image." && !loading && (
                       <div className="mt-2">
-                        <img
+                        <Image
                           src={`/${msg.image}`}
                           alt="Related content"
+                          width={24} height={24}
                           className="max-w-full h-auto rounded-md border border-gray-300"
                         />
                       </div>
@@ -190,9 +192,10 @@ export default function Home() {
                   </div>
 
                   {msg.role === 'user' && (
-                    <img
+                    <Image
                       src="/Profile.png"
                       alt="User Avatar"
+                      width={24} height={24}
                       className="w-8 h-8 md:w-10 md:h-10 ml-2 md:ml-3 rounded-full flex-shrink-0"
                     />
                   )}
@@ -232,9 +235,10 @@ export default function Home() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               ) : (
-                <img
+                <Image
                   src="/Vector.svg"
                   alt="Send"
+                  width={24} height={24}
                   className="w-4 h-4 md:w-6 md:h-6"
                 />
               )}
