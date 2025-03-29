@@ -179,7 +179,7 @@ export default function Home() {
                         <Image
                           src={`/${msg.image}`}
                           alt="Related content"
-                          width={24} height={24}
+                          width={400} height={300}
                           className="max-w-full h-auto rounded-md border border-gray-300"
                         />
                       </div>
