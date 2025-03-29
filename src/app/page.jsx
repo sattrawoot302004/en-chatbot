@@ -119,7 +119,7 @@ export default function Home() {
         <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       )}
 
-      <div className="flex-1 bg-white text-black flex flex-col h-screen">
+      <div className="bg-[#1E1E1E] p-3 flex-1 text-black flex flex-col h-screen">
         <div className="bg-[#A73B24] text-white px-8 py-5 text-lg font-semibold flex items-center justify-between rounded-t-2xl">
           <div className="flex items-center">
             <button
@@ -133,7 +133,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-2 md:p-4" style={{ height: 'calc(100vh - 160px)' }}>
+        <div className="bg-white flex-1 overflow-y-auto p-2 md:p-4" style={{ height: 'calc(100vh - 160px)' }}>
           <div className="space-y-3">
             {messages.map((msg, idx) => {
               const isLastBotMessage = msg.role === 'bot' && idx === messages.length - 1;
@@ -202,7 +202,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="p-2 md:p-4 border-t border-gray-200">
+        <div className="bg-white p-5 md:p-4">
           <div className="flex items-center space-x-2">
             <textarea
               value={input}
@@ -214,7 +214,7 @@ export default function Home() {
                 }
               }}
               placeholder="ถามคำถามที่นี่..."
-              className="flex-1 border rounded px-3 py-1 md:px-4 md:py-2 focus:outline-none focus:ring-2 focus:ring-red-400 resize-none text-sm md:text-base"
+              className="flex-1 border rounded-md px-3 py-2 md:px-4 md:py-2 focus:outline-none focus:ring-2 focus:ring-red-400 resize-none text-sm md:text-base"
               rows={Math.min(3, input.split('\n').length || 1)}
               style={{
                 overflowY: input.split('\n').length > 3 ? 'auto' : 'hidden'
@@ -222,7 +222,7 @@ export default function Home() {
             />
             <button
               onClick={sendMessage}
-              className="bg-[#E44E36] text-white p-1 md:p-2 rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center w-10 h-8 md:w-12 md:h-10"
+              className="bg-[#E44E36] text-white p-1 md:p-2 rounded-md hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center w-10 h-9.5 md:w-12 md:h-10"
               disabled={loading || input.trim() === ''}
               aria-label="Send message"
             >

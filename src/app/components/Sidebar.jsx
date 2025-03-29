@@ -17,7 +17,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
 
       <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
         fixed md:static z-50 w-80 bg-[#1E1E1E] p-6 flex flex-col justify-between h-screen 
-        transition-transform duration-300 ease-in-out`}>
+        transition-transform duration-500 ease-in-out transform opacity-0 ${isSidebarOpen ? 'opacity-100' : ''}`}>
 
         <div className="flex-1">
           <div className="flex justify-between items-center mb-6">
@@ -37,7 +37,8 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
           <nav className="space-y-4 mt-6">
             <Link href="/" onClick={() => setIsSidebarOpen(false)}>
               <button
-                className={`w-full flex items-center px-4 py-2 rounded text-white ${pathname === '/' ? 'bg-[#33333D]' : 'hover:bg-[#33333D]'
+                className={`w-full flex items-center px-4 py-2 rounded text-white transition-all duration-300 ease-in-out transform hover:scale-105 
+                  ${pathname === '/' ? 'bg-[#33333D]' : 'hover:bg-[#33333D]'
                   }`}
               >
                 <span className="mr-2">💬</span> Chat
@@ -45,7 +46,8 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
             </Link>
             <Link href="/about" onClick={() => setIsSidebarOpen(false)}>
               <button
-                className={`w-full flex items-center px-4 py-2 rounded text-white ${pathname === '/about' ? 'bg-[#33333D]' : 'hover:bg-[#33333D]'
+                className={`w-full flex items-center px-4 py-2 rounded text-white transition-all duration-300 ease-in-out transform hover:scale-105 
+                  ${pathname === '/about' ? 'bg-[#33333D]' : 'hover:bg-[#33333D]'
                   }`}
               >
                 <span className="mr-2">❔</span> About us
@@ -58,7 +60,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
           <img
             src="KKUimage.svg"
             alt="KKU Logo"
-            className="w-32 md:w-40"
+            className="w-32 md:w-40 transition-transform duration-300 transform hover:scale-105"
           />
         </div>
       </aside>

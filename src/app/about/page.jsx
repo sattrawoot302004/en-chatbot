@@ -7,7 +7,7 @@ function Page() {
   const teamMembers = [
     { name: 'Nutsaba Chaiyadet', id: '653040134-6', image: '/images/imm.png' },
     { name: 'Sattrawoot Parnemeng', id: '653040144-3', image: '/images/diamond.png' },
-    { name: 'Achira Artnascaw', id: '653040147-7', image: '/images/kati.png' },
+    { name: 'Achira Artnaseaw', id: '653040147-7', image: '/images/kati.png' },
     { name: 'Korapart Lertwittayakul', id: '653040436-0', image: '/images/fah.png' },
     { name: 'Raktapa Chaenglew', id: '653040459-8', image: '/images/vs.png' },
     { name: 'Ganpapath Pheephokinanan', id: '653040618-4', image: '/images/opal.png' }
@@ -20,8 +20,7 @@ function Page() {
       {isSidebarOpen && (
         <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       )}
-
-      <div className="flex-1 bg-white text-black flex flex-col h-screen">
+      <div className="bg-[#1E1E1E] p-3 flex-1 text-black flex flex-col h-screen">
         <div className="bg-[#A73B24] text-white px-8 py-5 text-lg font-semibold flex items-center justify-between rounded-t-2xl">
           <div className="flex items-center">
             <button
@@ -35,7 +34,7 @@ function Page() {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="bg-white flex-1 overflow-y-auto p-6">
           <div className="max-w-4xl mx-auto">
             {/* แถวบน 3 คน */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
