@@ -65,6 +65,7 @@ export async function POST(req) {
   try {
     // --- Construct the Prompt with Context ---
     const fullPrompt = `
+โปรดตอบเป็นภาษาไทย และจัดรูปแบบคำตอบด้วย Markdown แต่ถ้าไม่เกี่ยวกับ document ให้ตอบตามธรรมชาติเลยแต่ขอเป็นภาษาไทย
 Context from Khon Kaen University document:
 ---
 ${documentContent}
@@ -82,9 +83,8 @@ Answer:`;
           // (Since we can't use structured response with streaming)
           const imageDecisionResponse = await ai.models.generateContent({
             model: 'gemini-2.0-flash',
-            systemInstruction: `Based on this question about Khon Kaen University, select the most appropriate image.`,
-            contents: `Question: ${userQuestion} 
-            Select only one of these images: ["ช่องทางติดต่อ.jpg", "ค่าธรรมเนียมการศึกษา.png", "Not use any image."]`,
+            systemInstruction: `You are an assistant for Khon Kaen University's Engineering Faculty. Analyze the user's question and select the most appropriate image from the available options. Choose "ช่องทางติดต่อ.jpg" for questions about contact information, communication channels, or reaching the faculty. Choose "ค่าธรรมเนียมการศึกษา.png" for questions about tuition fees, educational costs, or financial matters. Choose "Not use any image." for all other topics that don't fit these categories.`,
+            contents: `Question: ${userQuestion}`,
             config: {
               responseMimeType: 'application/json',
               responseSchema: {
@@ -114,7 +114,16 @@ Answer:`;
           // Now start the streaming content generation
           const response = await ai.models.generateContentStream({
             model: 'gemini-2.0-flash',
-            systemInstruction: `You are a Teacher in Khon Kaen University you can help me to answer any question about Khon Kaen University. Answer in Thai. Make sure you return Markdown text`,
+            systemInstruction: `You are an expert assistant specializing in providing information about the Faculty of Engineering at Khon Kaen University. Your responses must always be in Thai language. Format your answers using proper Markdown for readability, including appropriate headings, bullet points, and emphasis where needed.
+When answering questions:
+1. If the question relates to the provided document content, prioritize this information and cite it in your answer
+2. For questions not covered in the document, provide accurate information based on your knowledge
+3. If uncertain about any information, acknowledge this limitation clearly
+4. Keep responses concise but comprehensive, with a friendly and helpful tone
+5. Use appropriate Thai formal language suitable for an educational institution
+6. If asked about something unrelated to Khon Kaen University, politely redirect to university-related topics
+
+ALL RESPONSES MUST BE WRITTEN IN THAI LANGUAGE WITH MARKDO`,
             contents: fullPrompt,
           });
           
